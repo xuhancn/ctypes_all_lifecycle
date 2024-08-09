@@ -38,9 +38,9 @@ def test_case():
         '''
         module.close()
     except Exception as e:
-        print(e)
+        print("Catched exception: ", e)
 
-    
+    os.remove(module_path)
  
 if __name__ == "__main__":
     test_case()
