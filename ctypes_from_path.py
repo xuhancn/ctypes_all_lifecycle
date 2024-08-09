@@ -1,7 +1,20 @@
 import os
 import ctypes
+import sys
 from pysrc.cpp_builder import CppBuilder, CppOptions, get_name_and_dir_from_output_file_path
 from ctypes import CDLL
+
+def is_windows():
+    return sys.platform == "win32"
+
+def unload_module_from_path(module_path:str):
+    if is_windows():
+        import _ctypes
+
+        handle = _ctypes.GetModuleHandleW(module_path)
+        if (handle != 0):
+            _ctypes.FreeLibrary(handle)
+    
 
 def test_case():
     cpp_code = os.path.join(os.getcwd(), "csrc", "test_cpp.cpp")
@@ -49,6 +62,12 @@ def test_case():
         os.remove(module_path)
     except Exception as e:
         print("remove exception: ", e)
- 
+
+        try:
+            unload_module_from_path(module_path)
+            os.remove(module_path)
+        except Exception as e:
+            print("retry remove exception: ", e)
+
 if __name__ == "__main__":
     test_case()
