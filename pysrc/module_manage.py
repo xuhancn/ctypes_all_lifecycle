@@ -7,6 +7,8 @@ from typing_extensions import Self
 def is_linux():
     return sys.platform.startswith("linux")
 
+def is_windows():
+    return sys.platform == "win32"
 
 class DLLWrapper:
     """A wrapper for a dynamic library."""
@@ -36,12 +38,18 @@ class DLLWrapper:
 
             if hasattr(syms, "dlclose"):
                 f_dlclose = syms.dlclose
+        elif is_windows():
+            import _ctypes
+            f_dlclose = _ctypes.FreeLibrary
         else:
             raise NotImplementedError("Unsupported env, failed to do dlclose!")
 
         if f_dlclose is not None:
-            f_dlclose.argtypes = [c_void_p]
-            f_dlclose(self.DLL._handle)
+            if is_linux():
+                f_dlclose.argtypes = [c_void_p]
+                f_dlclose(self.DLL._handle)
+            elif is_windows():
+                f_dlclose(self.DLL._handle)
         else:
             raise RuntimeError(
                 "dll unloading function was not found, library may not be unloaded properly!"

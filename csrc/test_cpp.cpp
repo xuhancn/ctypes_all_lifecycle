@@ -24,12 +24,12 @@ Debug for attach/deattach module
 #ifdef _WIN32
 void initialize()
 {
-    printf("initialize\n");
+    printf("Win --> initialize\n");
 }
 
 void finalize()
 {
-    printf("finalize\n");
+    printf("Win --> finalize\n");
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,
@@ -50,11 +50,11 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL,
 #else
 void __attribute__((constructor)) initialize()
 {
-    printf("initialize\n");
+    printf("Linux --> initialize\n");
 }
 
 void __attribute__((destructor)) finalize()
 {
-    printf("finalize\n");
+    printf("Linux -- > finalize\n");
 }
 #endif
