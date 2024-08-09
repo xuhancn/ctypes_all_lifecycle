@@ -17,6 +17,8 @@ def test_case():
         BuildOption=build_options)
     
     module_builder.build()
+    module_path = module_builder.get_target_file_path()
+    print("module_path: ", module_path)
 
  
 if __name__ == "__main__":
