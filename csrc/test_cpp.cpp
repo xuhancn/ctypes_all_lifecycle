@@ -4,7 +4,19 @@
 #include <windows.h>
 #endif
 
+#if defined(__GNUC__)
+#include <cpuid.h>
+#define __forceinline __attribute__((always_inline)) inline
+#define EXTERN_DLL_EXPORT extern "C"
+#elif defined(_MSC_VER)
+#include <intrin.h>
+#define EXTERN_DLL_EXPORT extern "C" __declspec(dllexport)
+#endif
 
+EXTERN_DLL_EXPORT int cpp_add(int a, int b)
+{
+    return a + b;
+}
 
 /*
 Debug for attach/deattach module
