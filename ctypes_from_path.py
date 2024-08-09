@@ -30,7 +30,17 @@ def test_case():
     c = module.cpp_add(a, b)
     print("cpp_add --> c: ", c)
 
-    module.close()
+    try:
+        '''
+        it will occured exception on Windows: AttributeError: function 'close' not found
+        but no exception on Linux.
+        ref: https://github.com/pytorch/pytorch/pull/132630
+        '''
+        module.close()
+    except Exception as e:
+        print(e)
+
+    
  
 if __name__ == "__main__":
     test_case()
