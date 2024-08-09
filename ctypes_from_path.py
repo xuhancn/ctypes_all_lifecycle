@@ -9,11 +9,16 @@ def is_windows():
 
 def unload_module_from_path(module_path:str):
     if is_windows():
-        import _ctypes
+        import ctypes, _ctypes
+        from ctypes import wintypes
 
-        handle = _ctypes.GetModuleHandleW(module_path)
-        if (handle != 0):
-            _ctypes.FreeLibrary(handle)
+        kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+
+        kernel32.GetModuleHandleW.restype = wintypes.HMODULE
+        kernel32.GetModuleHandleW.argtypes = [wintypes.LPCWSTR]
+        hMod = kernel32.GetModuleHandleW(module_path)
+        if (hMod != 0):
+            _ctypes.FreeLibrary(hMod)
     
 
 def test_case():
@@ -50,6 +55,7 @@ def test_case():
         ref: https://github.com/pytorch/pytorch/pull/132630
         '''
         module.close()
+        print("close module success")
     except Exception as e:
         print("close exception: ", e)
 
@@ -60,12 +66,14 @@ def test_case():
             PermissionError: [WinError 5] 拒绝访问。
         '''
         os.remove(module_path)
+        print("remove module_path success.")
     except Exception as e:
         print("remove exception: ", e)
 
         try:
             unload_module_from_path(module_path)
             os.remove(module_path)
+            print("retry remove module_path success.")
         except Exception as e:
             print("retry remove exception: ", e)
 
