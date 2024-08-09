@@ -38,9 +38,17 @@ def test_case():
         '''
         module.close()
     except Exception as e:
-        print("Catched exception: ", e)
+        print("close exception: ", e)
 
-    os.remove(module_path)
+    try:
+        '''
+        On Linux: it is works well to delete loaded module.
+        On Windows: when we delete the loaded module, it will catch exception:
+            PermissionError: [WinError 5] 拒绝访问。
+        '''
+        os.remove(module_path)
+    except Exception as e:
+        print("remove exception: ", e)
  
 if __name__ == "__main__":
     test_case()
