@@ -10,7 +10,7 @@ def is_windows():
 def unload_module_from_path(module_path:str):
     if is_windows():
         import ctypes, _ctypes
-        from ctypes import wintypes
+        from ctypes import wintypes, cdll
 
         kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
 

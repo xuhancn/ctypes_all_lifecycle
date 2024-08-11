@@ -39,8 +39,13 @@ class DLLWrapper:
             if hasattr(syms, "dlclose"):
                 f_dlclose = syms.dlclose
         elif is_windows():
-            import _ctypes
-            f_dlclose = _ctypes.FreeLibrary
+            import ctypes
+            from ctypes import wintypes
+
+            kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+            kernel32.FreeLibrary.argtypes = [wintypes.HMODULE]
+
+            f_dlclose = kernel32.FreeLibrary
         else:
             raise NotImplementedError("Unsupported env, failed to do dlclose!")
 
