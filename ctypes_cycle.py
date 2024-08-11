@@ -31,6 +31,18 @@ def test_case():
     print("cpp_add --> c: ", c)
 
     module.close()
+
+
+    module = DLLWrapper(module_path)
+
+    a = 2
+    b = 3
+    module.DLL.cpp_add.restype = ctypes.c_int
+    module.DLL.cpp_add.argtypes = [ctypes.c_int, ctypes.c_int]
+    c = module.DLL.cpp_add(a, b)
+    print("cpp_add --> c: ", c)
+
+    module.close()    
  
 if __name__ == "__main__":
     test_case()
