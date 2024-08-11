@@ -42,7 +42,7 @@ class DLLWrapper:
             import ctypes
             from ctypes import wintypes
 
-            kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+            kernel32 = ctypes.CDLL('kernel32', use_last_error=True)
             kernel32.FreeLibrary.argtypes = [wintypes.HMODULE]
 
             f_dlclose = kernel32.FreeLibrary
