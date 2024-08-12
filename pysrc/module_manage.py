@@ -40,10 +40,8 @@ class DLLWrapper:
                 f_dlclose = syms.dlclose
         elif is_windows():
             import ctypes
-            from ctypes import wintypes
 
-            kernel32 = ctypes.CDLL('kernel32', use_last_error=True)
-            kernel32.FreeLibrary.argtypes = [wintypes.HMODULE]
+            kernel32 = ctypes.CDLL("kernel32", use_last_error=True)
 
             f_dlclose = kernel32.FreeLibrary
         else:
@@ -54,6 +52,10 @@ class DLLWrapper:
                 f_dlclose.argtypes = [c_void_p]
                 f_dlclose(self.DLL._handle)
             elif is_windows():
+                import ctypes
+                from ctypes import wintypes
+
+                f_dlclose.argtypes = [wintypes.HMODULE]
                 f_dlclose(self.DLL._handle)
         else:
             raise RuntimeError(
