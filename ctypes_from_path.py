@@ -77,5 +77,17 @@ def test_case():
         except Exception as e:
             print("retry remove exception: ", e)
 
+    # build and load again
+    module_builder.build()
+    module = CDLL(module_path)
+    a = 2
+    b = 3
+    module.cpp_add.restype = ctypes.c_int
+    module.cpp_add.argtypes = [ctypes.c_int, ctypes.c_int]
+    c = module.cpp_add(a, b)
+    print("cpp_add --> c: ", c)
+    unload_module_from_path(module_path)
+    os.remove(module_path)
+
 if __name__ == "__main__":
     test_case()
